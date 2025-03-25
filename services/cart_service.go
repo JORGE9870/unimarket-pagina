@@ -2,6 +2,8 @@ package services
 
 import (
 	"errors"
+	"unimarket/controllers"
+	"unimarket/models"
 
 	"github.com/beego/beego/v2/client/orm"
 )
@@ -16,9 +18,9 @@ func NewCartService() *CartService {
 	}
 }
 
-func (s *CartService) AddItem(cartId int64, item *CartItem) error {
+func (s *CartService) AddItem(cartId int64, item *controllers.CartItem) error {
 	// Validar stock disponible
-	var product Product
+	var product models.Product
 	err := s.orm.QueryTable("productos").Filter("id_producto", item.ProductId).One(&product)
 	if err != nil {
 		return errors.New("producto no encontrado")
@@ -28,7 +30,7 @@ func (s *CartService) AddItem(cartId int64, item *CartItem) error {
 	}
 
 	// Actualizar si ya existe el item
-	var existingItem CartItem
+	var existingItem controllers.CartItem
 	err = s.orm.QueryTable("items_carrito").
 		Filter("id_carrito", cartId).
 		Filter("id_producto", item.ProductId).

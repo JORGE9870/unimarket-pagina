@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"unimarket/models"
 
 	"github.com/beego/beego/v2/client/orm"
 	"golang.org/x/crypto/bcrypt"
@@ -17,7 +18,7 @@ func NewUserService() *UserService {
 	}
 }
 
-func (s *UserService) Create(user *User) error {
+func (s *UserService) Create(user *models.User) error {
 	// Encriptar contraseña
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -36,8 +37,8 @@ func (s *UserService) Create(user *User) error {
 	return err
 }
 
-func (s *UserService) Authenticate(email, password string) (*User, error) {
-	var user User
+func (s *UserService) Authenticate(email, password string) (*models.User, error) {
+	var user models.User
 	err := s.orm.QueryTable("usuarios").Filter("email", email).One(&user)
 	if err != nil {
 		return nil, errors.New("credenciales inválidas")
