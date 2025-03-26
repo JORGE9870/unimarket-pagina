@@ -48,10 +48,7 @@ func (s *StoreController) Update() {
 	s.ResponseSuccess(map[string]string{"id": id, "message": "Store updated"})
 }
 
-// @Title DeleteStore
-// @Description delete store
-// @Success 200 {object} models.Store
-// @router /:id [delete]
+
 func (s *StoreController) Delete() {
 	id := s.GetString(":id")
 	s.ResponseSuccess(map[string]string{"id": id, "message": "Store deleted"})
