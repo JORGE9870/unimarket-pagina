@@ -1,13 +1,11 @@
-package controllers
+package controladores
 
 import (
-	"encoding/json"
-
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type UserController struct {
-	BaseController
+type ControladorUsuario struct {
+	ControladorBase
 }
 
 type User struct {
@@ -34,20 +32,20 @@ type Role struct {
 // @Success 200 {object} models.User
 // @Failure 400 Bad Request
 // @router / [post]
-func (u *UserController) Post() {
-	var user User
-	if err := json.Unmarshal(u.Ctx.Input.RequestBody, &user); err != nil {
-		u.ResponseError("Datos de solicitud inválidos", 400)
+func (u *ControladorUsuario) Crear() {
+	var usuario User
+	if err := u.ParsearYValidarJSON(&usuario); err != nil {
+		u.RespuestaError("Datos inválidos", 400)
 		return
 	}
 
 	o := orm.NewOrm()
-	if _, err := o.Insert(&user); err != nil {
-		u.ResponseError("Error al crear usuario", 500)
+	if _, err := o.Insert(&usuario); err != nil {
+		u.RespuestaError("Error al crear usuario", 500)
 		return
 	}
 
-	u.ResponseSuccess(user)
+	u.RespuestaExito(usuario)
 }
 
 // @Title GetUser
@@ -56,70 +54,69 @@ func (u *UserController) Post() {
 // @Success 200 {object} models.User
 // @Failure 404 User not found
 // @router /:id [get]
-func (u *UserController) Get() {
+func (u *ControladorUsuario) Obtener() {
 	id, err := u.GetInt64(":id")
 	if err != nil {
-		u.ResponseError("ID inválido", 400)
+		u.RespuestaError("ID inválido", 400)
 		return
 	}
 
-	var user User
+	var usuario User
 	o := orm.NewOrm()
-	if err := o.QueryTable("usuarios").Filter("id_usuario", id).One(&user); err != nil {
-		u.ResponseError("Usuario no encontrado", 404)
+	if err := o.QueryTable("usuarios").Filter("id_usuario", id).One(&usuario); err != nil {
+		u.RespuestaError("Usuario no encontrado", 404)
 		return
 	}
 
-	u.ResponseSuccess(user)
+	u.RespuestaExito(usuario)
 }
 
-func (u *UserController) GetAll() {
-	var users []User
+func (u *ControladorUsuario) Listar() {
+	var usuarios []User
 	o := orm.NewOrm()
-
-	if _, err := o.QueryTable("usuarios").All(&users); err != nil {
-		u.ResponseError("Error al obtener usuarios", 500)
+	if _, err := o.QueryTable("usuarios").All(&usuarios); err != nil {
+		u.RespuestaError("Error al obtener usuarios", 500)
 		return
 	}
 
-	u.ResponseSuccess(users)
+	u.RespuestaExito(usuarios)
 }
 
-func (u *UserController) Update() {
+func (u *ControladorUsuario) Actualizar() {
 	id, err := u.GetInt64(":id")
 	if err != nil {
-		u.ResponseError("ID inválido", 400)
+		u.RespuestaError("ID inválido", 400)
 		return
 	}
 
-	var user User
-	if err := json.Unmarshal(u.Ctx.Input.RequestBody, &user); err != nil {
-		u.ResponseError("Datos inválidos", 400)
+	var usuario User
+	if err := u.ParsearYValidarJSON(&usuario); err != nil {
+		u.RespuestaError("Datos inválidos", 400)
 		return
 	}
 
-	user.Id = id
+	usuario.Id = id
 	o := orm.NewOrm()
-	if _, err := o.Update(&user); err != nil {
-		u.ResponseError("Error al actualizar usuario", 500)
+	if _, err := o.Update(&usuario); err != nil {
+		u.RespuestaError("Error al actualizar usuario", 500)
 		return
 	}
 
-	u.ResponseSuccess(user)
+	u.RespuestaExito(usuario)
 }
 
-func (u *UserController) Delete() {
+func (u *ControladorUsuario) Eliminar() {
 	id, err := u.GetInt64(":id")
 	if err != nil {
-		u.ResponseError("ID inválido", 400)
+		u.RespuestaError("ID inválido", 400)
 		return
 	}
 
 	o := orm.NewOrm()
 	if _, err := o.Delete(&User{Id: id}); err != nil {
-		u.ResponseError("Error al eliminar usuario", 500)
+		u.RespuestaError("Error al eliminar usuario", 500)
 		return
 	}
 
-	u.ResponseSuccess(map[string]string{"message": "Usuario eliminado"})
+	u.RespuestaExito(map[string]string{"mensaje": "Usuario eliminado"})
 }
