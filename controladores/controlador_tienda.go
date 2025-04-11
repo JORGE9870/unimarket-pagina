@@ -49,7 +49,7 @@ func (c *ControladorTienda) Crear() {
 // @router / [get]
 func (c *ControladorTienda) Listar() {
 	c.RespuestaExito([]models.Tienda{})
-}w
+}
 
 // @Title GetStore
 // @Description get store by id

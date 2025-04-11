@@ -2,7 +2,6 @@ package models
 
 type Store struct {
 	BaseModel
-	Id          int64      `orm:"pk;auto" json:"id"`
 	Name        string     `orm:"size(64);unique" json:"name"`
 	Description string     `orm:"size(255)" json:"description"`
 	Address     string     `orm:"size(255)" json:"address"`

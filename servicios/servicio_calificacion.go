@@ -1,7 +1,7 @@
 package services
 
 import (
-	"unimarket/models"
+	modelos "unimarket/modelos"
 
 	"github.com/beego/beego/v2/client/orm"
 )
@@ -30,8 +30,8 @@ func (s *RatingService) HasUserRated(userId, productId int64) (bool, error) {
 	return exist, nil
 }
 
-func (s *RatingService) GetTopRatedProducts(limit int) ([]models.Product, error) {
-	var products []models.Product
+func (s *RatingService) GetTopRatedProducts(limit int) ([]modelos.Product, error) {
+	var products []modelos.Product
 	_, err := s.orm.Raw(`
         SELECT p.*, AVG(r.puntuacion) as rating_promedio 
         FROM productos p 

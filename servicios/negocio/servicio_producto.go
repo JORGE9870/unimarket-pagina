@@ -2,7 +2,7 @@ package business
 
 import (
 	"errors"
-	"unimarket/models"
+	models "unimarket/modelos"
 	"unimarket/repositories"
 )
 
@@ -10,6 +10,28 @@ type ProductService struct {
 	repo    repositories.ProductRepository
 	cache   repositories.CacheRepository
 	metrics repositories.MetricsRepository
+}
+
+func (s *ProductService) calculateFinalPrice(basePrice, discount float64) float64 {
+	if discount <= 0 {
+		return basePrice
+	}
+	return basePrice * (1 - discount/100)
+}
+
+func (s *ProductService) calculateReviewsAverage(productId string) float64 {
+	// TODO: Implement review average calculation logic
+	return 0.0
+}
+
+func (s *ProductService) calculateStockTurnover(productId string) float64 {
+	// TODO: Implement stock turnover calculation logic
+	return 0.0
+}
+
+func (s *ProductService) calculateTrendScore(productId string) float64 {
+	// TODO: Implement trend score calculation logic
+	return 0.0
 }
 
 func (s *ProductService) ProcessProduct(data *models.ProductRequest) (*models.ProductResponse, error) {
@@ -103,4 +125,39 @@ func (s *ProductService) UpdateProductStatus(productId string, status string) er
 	s.notifyExternalSystems(productId, status)
 
 	return nil
+}
+
+func (s *ProductService) processImages(images []string) error {
+	// TODO: Implement image processing logic
+	return nil
+}
+
+func (s *ProductService) verifyStockAvailability(sku string, quantity int) error {
+	// TODO: Implement stock verification logic
+	return nil
+}
+
+func (s *ProductService) getAvailableLocations(sku string) []string {
+	// TODO: Implement location retrieval logic
+	return []string{}
+}
+
+func (s *ProductService) areValidCategories(categories []string) bool {
+	// TODO: Implement category validation logic
+	return true
+}
+
+func (s *ProductService) isPriceValid(price float64, categories []string) bool {
+	// TODO: Implement price validation logic
+	return true
+}
+
+func (s *ProductService) isBrandAllowed(brand string, categories []string) bool {
+	// TODO: Implement brand validation logic
+	return true
+}
+
+func (s *ProductService) isValidStatusTransition(productId, newStatus string) bool {
+	// TODO: Implement status transition validation logic
+	return true
 }
