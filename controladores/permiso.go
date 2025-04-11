@@ -25,7 +25,13 @@ func (c *ControladorPermiso) Crear() {
 		c.RespuestaError("Datos inválidos", 400)
 		return
 	}
-
+	func (c *ControladorPermiso) Crear() {
+		var permiso Permiso
+		if err := c.ParsearYValidarJSON(&permiso); err != nil {
+			c.RespuestaError("Datos inválidos", 400)
+			return
+		}
+	
 	if permiso.Nombre == "" {
 		c.RespuestaError("El nombre es requerido", 400)
 		return
